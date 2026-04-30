@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Новый вуз{% endblock %}
+
+{% block content %}
+<h2>Данные учебного заведения</h2>
+
+<div style="max-width:680px;margin-top:12px">
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="form-row">
+      <label>{{ form.full_name.label }}</label>
+      {{ form.full_name() }}
+      {% for e in form.full_name.errors %}<div class="error">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="form-row">
+      <label>{{ form.short_name.label }}</label>
+      {{ form.short_name() }}
+      {% for e in form.short_name.errors %}<div class="error">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="form-row">
+      <label>{{ form.creation_date.label }}</label>
+      {{ form.creation_date() }}
+      {% for e in form.creation_date.errors %}<div class="error">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div style="margin-top:14px">
+      {{ form.submit(class="btn btn-primary") }}
+      <a class="btn btn-ghost" href="{{ url_for('university_list') }}">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

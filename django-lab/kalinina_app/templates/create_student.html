@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <title>Добавить студента</title>
+    <style>
+        body { font-family: Inter, Roboto, Arial, sans-serif; background:#f6f8fb; color:#1f2937; margin:0; padding:0; }
+        .wrap { max-width:760px; margin:48px auto; background:#fff; border-radius:10px; box-shadow:0 6px 18px rgba(20,20,40,0.06); padding:28px; }
+        header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+        h1 { font-size:20px; margin:0; }
+        a.back { color:#0b69ff; text-decoration:none; font-size:14px; }
+        form table { width:100%; border-collapse:collapse; }
+        .actions { margin-top:14px; display:flex; gap:8px; }
+        input[type="submit"] { background:#0b69ff; color:#fff; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; }
+        input[type="submit"]:hover { opacity:0.95; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <h1>Добавление студента</h1>
+            <a class="back" href="/kalinina_app/student/">← Вернуться к списку</a>
+        </header>
+
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+
+            <div class="actions">
+                <input type="submit" value="Создать студента" />
+            </div>
+        </form>
+    </div>
+</body>
+</html>

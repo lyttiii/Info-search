@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Редактировать университет{% endblock %}
+
+{% block content %}
+<h1>Редактировать университет</h1>
+<a href="{{ url_for('university_list') }}" class="btn btn-primary">Назад к списку</a>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.full_name.label }}
+        {{ form.full_name() }}
+        {% if form.full_name.errors %}
+            {% for error in form.full_name.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.short_name.label }}
+        {{ form.short_name() }}
+        {% if form.short_name.errors %}
+            {% for error in form.short_name.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.creation_date.label }}
+        {{ form.creation_date() }}
+        {% if form.creation_date.errors %}
+            {% for error in form.creation_date.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.submit(class="btn btn-success") }}
+    </div>
+</form>
+{% endblock %}
+

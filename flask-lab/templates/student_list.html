@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Учёт студентов{% endblock %}
+
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+  <h2 style="margin:0">Учет студентов</h2>
+  <div>
+    {% if current_user.is_authenticated %}
+      <a class="btn btn-primary" href="{{ url_for('create_student') }}">Добавить студента</a>
+    {% else %}
+      <a class="btn btn-ghost" href="{{ url_for('login') }}">Войти для ред.</a>
+    {% endif %}
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ФИО</th>
+      <th>Дата рожд.</th>
+      <th>Вуз</th>
+      <th>Год зачисления</th>
+      {% if current_user.is_authenticated %}<th>Управление</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+    <tr>
+      <td>{{ student.full_name }}</td>
+      <td>{{ student.birth_date }}</td>
+      <td>{{ student.university.short_name }}</td>
+      <td>{{ student.enrollment_year }}</td>
+      {% if current_user.is_authenticated %}
+      <td>
+        <a class="btn btn-ghost" href="{{ url_for('edit_student', student_id=student.id) }}">Изменить</a>
+        <a class="btn btn-danger" href="{{ url_for('delete_student', student_id=student.id) }}" onclick="return confirm('Точно удалить запись?')">Удалить</a>
+      </td>
+      {% endif %}
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="muted">Пока нет записей</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

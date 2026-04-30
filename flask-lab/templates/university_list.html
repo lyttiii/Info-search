@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Реестр вузов{% endblock %}
+
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center">
+  <h2 style="margin:0">Перечень учебных заведений</h2>
+  <div>
+    {% if current_user.is_authenticated %}
+      <a class="btn btn-primary" href="{{ url_for('create_university') }}">Добавить вуз</a>
+    {% else %}
+      <a class="btn btn-ghost" href="{{ url_for('login') }}">Войти</a>
+    {% endif %}
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Полное название</th>
+      <th>Короткое</th>
+      <th>Дата основания</th>
+      {% if current_user.is_authenticated %}<th>Действия</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in universities %}
+    <tr>
+      <td>{{ u.full_name }}</td>
+      <td>{{ u.short_name }}</td>
+      <td>{{ u.creation_date }}</td>
+      {% if current_user.is_authenticated %}
+      <td>
+        <a class="btn btn-ghost" href="{{ url_for('edit_university', university_id=u.id) }}">Изменить</a>
+        <a class="btn btn-danger" href="{{ url_for('delete_university', university_id=u.id) }}" onclick="return confirm('Удалить вуз?')">Удалить</a>
+      </td>
+      {% endif %}
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="muted">Нет данных</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

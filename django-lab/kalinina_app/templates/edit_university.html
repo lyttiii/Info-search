@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <title>Редактировать университет</title>
+    <style>
+        body{font-family:Inter, Roboto, Arial, sans-serif;background:#fbfcfe;color:#111827;margin:0;padding:0}
+        .wrap{max-width:800px;margin:46px auto;background:#fff;padding:26px;border-radius:10px;box-shadow:0 8px 20px rgba(12,20,40,0.06)}
+        header{display:flex;justify-content:space-between;align-items:center}
+        h1{margin:0;font-size:18px}
+        a.back{color:#185adb;text-decoration:none}
+        form table{width:100%;margin-top:12px}
+        .save{margin-top:14px}
+        input[type="submit"]{background:#185adb;color:#fff;padding:8px 14px;border-radius:7px;border:none;cursor:pointer}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <h1>Редактирование университета</h1>
+            <a class="back" href="/kalinina_app/university/">← к списку</a>
+        </header>
+
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <div class="save">
+                <input type="submit" value="Сохранить" />
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <title>Добавить университет</title>
+    <style>
+        body { font-family: Inter, Roboto, Arial, sans-serif; background:#fbfbfd; color:#111827; margin:0; padding:0; }
+        .panel { max-width:800px; margin:48px auto; background:#fff; border-radius:10px; padding:28px; box-shadow:0 6px 18px rgba(10,10,20,0.04); }
+        header { display:flex; justify-content:space-between; align-items:center; }
+        h1 { margin:0; font-size:20px; }
+        a.link { color:#2563eb; text-decoration:none; font-size:14px; }
+        form table { width:100%; margin-top:12px; }
+        .submit { margin-top:16px; }
+        input[type="submit"] { padding:8px 14px; border-radius:7px; border: none; background:#2563eb; color:white; cursor:pointer; }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <header>
+            <h1>Новый университет</h1>
+            <a href="/university/">← К списку университетов</a>
+        </header>
+
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <div class="submit">
+                <input type="submit" value="Сохранить" />
+            </div>
+        </form>
+    </div>
+</body>
+</html>

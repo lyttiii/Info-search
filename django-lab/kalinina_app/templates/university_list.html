@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <title>Университеты</title>
+    <style>
+        body{font-family:Inter, Roboto, Arial, sans-serif;background:#fbfbfd;color:#0f1724;margin:0;padding:0}
+        .panel{max-width:1000px;margin:40px auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 8px 18px rgba(8,16,30,0.04)}
+        header{display:flex;justify-content:space-between;align-items:center}
+        h1{margin:0;font-size:18px}
+        .tools a{color:#0b69ff;text-decoration:none;margin-left:10px}
+        table{width:100%;border-collapse:collapse;margin-top:12px}
+        th,td{padding:10px;border-bottom:1px solid #eef2f7;text-align:left}
+        th{background:#fbfdff;font-weight:600}
+        a.small{color:#2563eb;text-decoration:none;margin-right:8px}
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <header>
+            <h1>Список университетов</h1>
+            <div class="tools">
+                <a href="/kalinina_app/">На главную</a> |
+                <a href="create">Добавить университет</a>
+            </div>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Полное название</th>
+                    <th>Сокращённое</th>
+                    <th>Дата создания</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for university in universities %}
+                <tr>
+                    <td>{{ university.full_name }}</td>
+                    <td>{{ university.short_name }}</td>
+                    <td>{{ university.creation_date }}</td>
+                    <td>
+                        <a class="small" href="edit/{{ university.id }}">Ред.</a>
+                        <a class="small" href="delete/{{ university.id }}">Удал.</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">Университеты не найдены.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
