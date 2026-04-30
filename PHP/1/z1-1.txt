@@ -1,0 +1,160 @@
+1. Напишите запрос, который выводит все строки из таблицы Покупателей, для которых номер продавца равен 1001:
+SELECT * 
+FROM cust 
+WHERE snum = 1001;
+
+2. Напишите запрос, который выводит таблицу Продавцов со столбцами в следующем порядке: city, sname, snum, comm:
+SELECT city, sname, snum, comm 
+FROM sal;
+
+3. Напишите запрос, который выводит оценку (rating), сопровождаемую именем каждого покупателя в городе San Jose:
+SELECT rating, cname 
+FROM cust 
+WHERE city = 'San Jose';
+
+4. Напишите запрос, который выводит значение номера продавца всех продавцов из таблицы Заказов без каких бы то ни было повторений:
+SELECT DISTINCT snum 
+FROM ord;
+
+5. Напишите запрос, который может выдать вам поля sname и city для всех продавцов в Лондоне с комиссионными строго больше 0.11:
+SELECT sname, city 
+FROM sal 
+WHERE city = 'LONDON' AND comm > 0.11;
+
+6. Напишите запрос к таблице Покупателей, который может вывести данные обо всех покупателях с рейтингом меньше или равным 200, если они не находятся в Риме:
+SELECT * 
+FROM cust 
+WHERE rating <= 200 AND city NOT IN ('Rome');
+
+7. Запросите двумя способами все заказы на 3 и 5 октября 1990г:
+-- 1 способ
+SELECT onum
+FROM ord
+WHERE odate = '03-OCT-90' OR odate = '05-OCT-90';
+
+-- 2 способ
+SELECT onum
+FROM ord
+WHERE odate IN ('03-OCT-90', '05-OCT-90');
+
+8. Напишите запрос, который может вывести всех покупателей, чьи имена начинаются с буквы, попадающей в диапазон от A до G:
+SELECT * 
+FROM cust 
+WHERE cname RLIKE '^[A-G]';
+
+9. Напишите запрос, который выберет всех продавцов, имена которых содержат букву e:
+SELECT * 
+FROM sal 
+WHERE sname RLIKE 'e';
+
+10. Напишите запрос, который сосчитал бы сумму всех заказов на 3 октября 1990 г:
+SELECT COUNT(onum) 
+FROM ord 
+WHERE odate IN ('03-OCT-90');
+
+11. Напишите запрос, который сосчитал бы сумму всех заказов для продавца с номером 1001:
+SELECT COUNT(onum) 
+FROM ord 
+WHERE snum = 1001;
+
+12. Напишите запрос, который выбрал бы наибольший заказ для каждого продавца:
+SELECT snum, MAX(amt) AS max_order 
+FROM ord 
+GROUP BY snum;
+
+13. Напишите запрос, который выбрал бы покупателя, чье имя является первым в алфавитном порядке среди имен, заканчивающихся на букву s:
+SELECT cname 
+FROM cust 
+WHERE cname RLIKE 's$' 
+ORDER BY cname ASC;
+
+14. Напишите запрос, который выбрал бы средние комиссионные в каждом городе:
+SELECT city, AVG(comm) AS avg_commis 
+FROM sal 
+GROUP BY city;
+
+15. Напишите запрос, который вывел бы для каждого заказа на 3 октября его номер, стоимость заказа в евро (1$=0.8 евро), имя продавца и размер комиссионных, полученных продавцом за этот заказ:
+SELECT onum, amt * 0.8 AS eur_price, sname, comm * amt * 0.8 AS eur_commis
+FROM ord
+INNER JOIN sal ON ord.snum = sal.snum
+WHERE odate = '03-OCT-90';
+
+16. Напишите запрос, который выводит номера заказов в возрастающем порядке, а также имена продавцов и покупателей заказов, продавец которых находится в Лондоне или Риме:
+SELECT onum, sname, cname 
+FROM ord 
+INNER JOIN sal ON ord.snum = sal.snum 
+INNER JOIN cust ON ord.cnum = cust.cnum 
+WHERE sal.city IN ('Rome', 'London') 
+ORDER BY onum ASC;
+
+17. Запросите имена продавцов в алфавитном порядке, суммарные значения их заказов, совершенных до 5 октября, и полученные комиссионные:
+SELECT s.sname AS name,
+       SUM(o.amt) AS sum_orders,
+       SUM(s.comm * o.amt) AS sum_comm
+FROM sal s
+JOIN cust c ON s.snum = c.snum
+JOIN ord o ON c.cnum = o.cnum
+WHERE o.odate < '05-OCT-90'
+GROUP BY s.sname
+ORDER BY s.sname;
+
+18. Выведите номера заказов, их стоимость и имена продавцов и покупателей, если продавцы и покупатели находятся в городах, чьи названия начинаются с букв из диапазона от L до R:
+SELECT onum,
+       amt,
+       s.sname AS seller,
+       c.cname AS customer
+FROM ord o
+JOIN cust c ON o.cnum = c.cnum
+JOIN sal s ON o.snum = s.snum
+WHERE s.city RLIKE '^[L-R]'
+   AND c.city RLIKE '^[L-R]';
+
+19. Запросите все пары покупателей, обслуживаемые одним и тем же продавцом. Исключите комбинации покупателей с самими собой, а также пары в обратном порядке:
+SELECT DISTINCT c1.cname AS first,
+                c2.cname AS second,
+                s.sname AS seller
+FROM cust c1
+JOIN cust c2 ON c1.snum = c2.snum AND c1.cnum < c2.cnum
+JOIN sal s ON c1.snum = s.snum;
+
+20. С помощью подзапроса выведите имена всех покупателей, чьи продавцы имеют комиссионные меньше 0.13:
+SELECT c.cname
+FROM cust c
+WHERE c.snum IN (
+    SELECT snum
+    FROM sal
+    WHERE comm < 0.13
+);
+
+21. Напишите команду, создающую копию таблицы Продавцов с одновременным копированием данных из SAMPLE.SAL. Убедитесь в сходности структур таблиц при помощи команды DESC и идентичности данных в таблице-оригинале и таблице-копии:
+CREATE TABLE sal_copy AS
+SELECT *
+FROM sal;
+
+22. Напишите последовательность команд, которая вставляет две новые записи в вашу таблицу Продавцов, выводит таблицу после вставки, удаляет одну запись о новом продавце и вновь выводит таблицу:
+INSERT INTO sal(snum, sname, city, comm) 
+VALUES(1017, 'Svetlana', 'Barnaul', 0.23), 
+	(1037, 'Mark', 'Sochi', 0.18);
+
+SELECT *
+FROM sal;
+
+DELETE FROM sal
+WHERE snum = 1017;
+
+SELECT *
+FROM sal;
+
+23. Напишите последовательность команд, которая вставляет две строки в вашу таблицу Продавцов, увеличивает в 2 раза комиссионные у всех продавцов и выводит содержимое таблицы после каждого изменения:
+INSERT INTO sal(snum, sname, city, comm) 
+VALUES(1017, 'Svetlana', 'Barnaul', 0.23), 
+	(1037, 'Mark', 'Sochi', 0.18);
+
+SELECT *
+FROM sal;
+
+UPDATE sal
+SET comm = comm * 2;
+
+SELECT * 
+FROM sal;
